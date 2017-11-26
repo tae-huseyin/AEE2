@@ -4,8 +4,10 @@ package com.theappexperts.aee2.views.musiclist.fragment;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,19 +17,25 @@ import android.view.ViewGroup;
 
 import com.theappexperts.aee2.MainActivity;
 import com.theappexperts.aee2.R;
+import com.theappexperts.aee2.data.AppDataManager;
 import com.theappexperts.aee2.data.network.constants.constant.MusicModel;
 import com.theappexperts.aee2.data.network.constants.constant.Result;
 import com.theappexperts.aee2.views.musiclist.IMusicListMvpView;
 import com.theappexperts.aee2.views.musiclist.MusicListPresenter;
+import com.theappexperts.aee2.views.ui.base.BasePresenter;
+import com.theappexperts.aee2.views.ui.utils.rx.AppSchedulerProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class MusicListFragment extends Fragment implements IMusicListMvpView {
 
     private RecyclerView rvMusicList;
     private MusicListPresenter<MainActivity> musicListPresenter;
     private MediaPlayer mediaPlayer = new MediaPlayer();
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ArrayList<Result> musicListArray;
 
@@ -35,14 +43,29 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
         // Required empty public constructor
     }
 
+    public void initData()
+    {
+        musicListPresenter = new MusicListPresenter<>(new AppDataManager(), new AppSchedulerProvider(), new CompositeDisposable());
+        musicListPresenter.onAttach((MainActivity) getActivity());
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvMusicList = (RecyclerView) view.findViewById(R.id.rvMusicList);
         rvMusicList.setLayoutManager(new LinearLayoutManager(getContext()));
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
-        //musicListPresenter = new MusicListPresenter<>(new AppDataManager(), new AppSchedulerProvider(), new CompositeDisposable());
-        //musicListPresenter.onAttach();
+        initData();
+        musicListPresenter.onCallMusicList();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                musicListPresenter.onCallMusicList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         rvMusicList.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), rvMusicList ,new RecyclerItemClickListener.OnItemClickListener() {
