@@ -29,7 +29,7 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
     private MusicListPresenter<MainActivity> musicListPresenter;
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
-    ArrayList<Result> musicListArray;
+    private ArrayList<Result> musicListArray;
 
     public MusicListFragment() {
         // Required empty public constructor
