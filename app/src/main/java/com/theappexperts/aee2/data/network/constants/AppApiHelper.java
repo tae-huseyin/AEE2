@@ -22,8 +22,8 @@ public class AppApiHelper implements ApiHelper{
     //@Query("term") String term,@Query("media") String media, @Query("entity") String entity, @Query("limit") int length
     @Override
     public Observable<MusicModel> getFromApi_MusicList() {
-        //return requestInterface.getMusicsList(API_List.TERM_CLASSIC, API_List.MEDIA, API_List.ENTITY, 50);
-        return requestInterface.getMusicsList();
+        return requestInterface.getMusicsList(API_List.TERM_CLASSIC, API_List.MEDIA, API_List.ENTITY, 50);
+        //return requestInterface.getMusicsList();
     }
 
 }

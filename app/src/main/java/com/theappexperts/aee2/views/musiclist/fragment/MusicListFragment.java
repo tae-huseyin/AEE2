@@ -72,18 +72,24 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
                         // when clicked
                         Log.i("tag",  "item " + position);
 
-                        if(musicListArray != null) {
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            try {
-                                mediaPlayer.setDataSource(musicListArray.get(position).getPreviewUrl());
-                                mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                                mediaPlayer.start();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                mediaPlayer.stop();
-                                mediaPlayer.release();
-                            }
-                        }
+
+
+                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                try {
+                                    mediaPlayer.setDataSource(musicListArray.get(position).getPreviewUrl());
+                                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                                    mediaPlayer.start();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }finally {
+                                    //put on stop
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                    mediaPlayer = null;
+                                }
+
+
+
 
                     }
 
@@ -92,6 +98,12 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
                     }
                 })
         );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.release();
     }
 
     @Override

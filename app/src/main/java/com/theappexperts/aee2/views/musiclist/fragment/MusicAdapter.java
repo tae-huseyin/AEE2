@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.theappexperts.aee2.R;
 import com.theappexperts.aee2.data.network.constants.constant.Result;
 
@@ -36,8 +35,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(applicationContext).inflate(R.layout.music_row, parent, false);
-
-        Fresco.initialize(applicationContext);
 
         //viewholder init view elements and is then passed back
         return new MyViewHolder(view);
