@@ -33,10 +33,9 @@ import io.reactivex.disposables.CompositeDisposable;
 public class MusicListFragment extends Fragment implements IMusicListMvpView {
 
     private RecyclerView rvMusicList;
-    private MusicListPresenter<MainActivity> musicListPresenter;
+    private MusicListPresenter<MusicListFragment> musicListPresenter;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private ArrayList<Result> musicListArray;
 
     public MusicListFragment() {
@@ -46,7 +45,7 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
     public void initData()
     {
         musicListPresenter = new MusicListPresenter<>(new AppDataManager(), new AppSchedulerProvider(), new CompositeDisposable());
-        musicListPresenter.onAttach((MainActivity) getActivity());
+        musicListPresenter.onAttach(this);
     }
 
     @Override
@@ -105,6 +104,7 @@ public class MusicListFragment extends Fragment implements IMusicListMvpView {
     @Override
     public void onFetchDataSuccess(MusicModel musicModels) {
         musicListArray = new ArrayList<>(musicModels.getResults());
+        Log.i("test", "num " + musicListArray.size());
         rvMusicList.setAdapter(new MusicAdapter(musicListArray, R.layout.music_row, getContext()));
     }
 

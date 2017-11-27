@@ -5,6 +5,10 @@ public class API_List {
     //https://itunes.apple.com/search?term=classick&amp;media=music&amp;entity=song&amp;limit=50
 
     public static final String BASE_URL= "https://itunes.apple.com/";
+
+    public static final String CLASSIC_URL = "search?term=classick&amp;media=music&amp;entity=song&amp;limit=50";
+
+
     public static final String MUSIC_LIST_API= "search";
 
     public static final String TERM_CLASSIC = "classick";
